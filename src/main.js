@@ -3,8 +3,12 @@ import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
 import VueGoogleCharts from 'vue-google-charts'
-import { domain, clientId, audience } from "../auth_config.json";
+//dev only
+// import { domain, clientId, audience } from "../auth_config.json";
 import { Auth0Plugin } from "./auth";
+const domain = process.env.VUE_APP_DOMAIN,
+      clientId = process.env.VUE_APP_CLIENT_ID,
+      audience = process.env.VUE_APP_AUDIENCE;
 
 Vue.use(Auth0Plugin, {
   domain,
