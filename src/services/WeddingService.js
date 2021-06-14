@@ -47,7 +47,7 @@ export async function getErrorYes(accessToken) {
     };
 
     try{
-        let res = await axios.get(`${baseUrl}/chase`, axiosConfig);
+        let res = await axios.get(`${baseUrl}/error`, axiosConfig);
         return res.data;
     } catch(err) {
         console.log(err);
