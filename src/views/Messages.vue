@@ -178,7 +178,6 @@
 
         getErrorYes(accessToken).then(res => {
           this.errorGuests = res;
-          console.log(this.errorGuests)
         });
       },
       async getErrorYes() {
