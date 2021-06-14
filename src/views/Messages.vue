@@ -93,7 +93,7 @@
 </template>
 
 <script>
-  import { getGuests, getChaseGuests, getAttendingGuests, sendMessage, fetchLogs } from '../services/WeddingService';
+  import { getGuests, getChaseGuests, getAttendingGuests, sendMessage, fetchLogs, getErrorYes } from '../services/WeddingService';
   import * as moment from "moment/moment";
 
   export default {
@@ -108,12 +108,13 @@
         messageRules: [
           v => !!v || 'Message is required',
         ],
-        guestTypes: ['All Guests', 'No Response', 'Attending Guests'],
+        guestTypes: ['All Guests', 'No Response', 'Attending Guests', 'Error Guests'],
         guestType: '',
         message: '',
         allGuests: [],
         chaseGuests: [],
         attendingGuests: [],
+        errorGuests: [],
         status: [],
         testMessage: {
           number: "+13137275279",
@@ -152,6 +153,7 @@
       this.getAllGuests();
       this.getAllChaseGuests();
       this.getAllAttendingGuests();
+      this.getErrorYesGuests();
       this.getAllLogs();
     },
     components: {
@@ -165,6 +167,21 @@
         });
       },
       async getAllChaseGuests() {
+        const accessToken = await this.$auth.getTokenSilently();
+
+        getChaseGuests(accessToken).then(res => {
+          this.chaseGuests = res;
+        });
+      },
+      async getErrorYesGuests() {
+        const accessToken = await this.$auth.getTokenSilently();
+
+        getErrorYes(accessToken).then(res => {
+          this.errorGuests = res;
+          console.log(this.errorGuests)
+        });
+      },
+      async getErrorYes() {
         const accessToken = await this.$auth.getTokenSilently();
 
         getChaseGuests(accessToken).then(res => {
@@ -222,6 +239,16 @@
               message: messageBody
             }
             this.sendFullMessage(packet, this.chaseGuests[j].name);
+            this.reset();
+            this.resetValidation();
+          }
+        } else if (guestType === 'Error Guests') {
+          for (var l = 0; l < this.errorGuests.length; l++) {
+            packet = {
+              number: this.errorGuests[l].phone,
+              message: messageBody
+            }
+            this.sendFullMessage(packet, this.errorGuests[l].name);
             this.reset();
             this.resetValidation();
           }
