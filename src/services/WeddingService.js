@@ -37,7 +37,7 @@ export async function getChaseGuests(accessToken) {
     }
 }
 
-export async function getErrorYes(accessToken) {
+export async function getKlayo(accessToken) {
     let axiosConfig = {
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -47,7 +47,7 @@ export async function getErrorYes(accessToken) {
     };
 
     try{
-        let res = await axios.get(`${baseUrl}/error`, axiosConfig);
+        let res = await axios.get(`${baseUrl}/klayo`, axiosConfig);
         return res.data;
     } catch(err) {
         console.log(err);

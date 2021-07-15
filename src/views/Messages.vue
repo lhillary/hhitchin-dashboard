@@ -93,7 +93,7 @@
 </template>
 
 <script>
-  import { getGuests, getChaseGuests, getAttendingGuests, sendMessage, fetchLogs, getErrorYes } from '../services/WeddingService';
+  import { getGuests, getChaseGuests, getAttendingGuests, sendMessage, fetchLogs, getKlayo } from '../services/WeddingService';
   import * as moment from "moment/moment";
 
   export default {
@@ -108,13 +108,13 @@
         messageRules: [
           v => !!v || 'Message is required',
         ],
-        guestTypes: ['All Guests', 'No Response', 'Attending Guests', 'Error Guests'],
+        guestTypes: ['All Guests', 'No Response', 'Attending Guests', 'Klayo'],
         guestType: '',
         message: '',
         allGuests: [],
         chaseGuests: [],
         attendingGuests: [],
-        errorGuests: [],
+        klayoGuests: [],
         status: [],
         testMessage: {
           number: "+13137275279",
@@ -153,7 +153,7 @@
       this.getAllGuests();
       this.getAllChaseGuests();
       this.getAllAttendingGuests();
-      this.getErrorYesGuests();
+      this.getKlayoGuests();
       this.getAllLogs();
     },
     components: {
@@ -173,18 +173,11 @@
           this.chaseGuests = res;
         });
       },
-      async getErrorYesGuests() {
+      async getKlayoGuests() {
         const accessToken = await this.$auth.getTokenSilently();
 
-        getErrorYes(accessToken).then(res => {
-          this.errorGuests = res;
-        });
-      },
-      async getErrorYes() {
-        const accessToken = await this.$auth.getTokenSilently();
-
-        getChaseGuests(accessToken).then(res => {
-          this.chaseGuests = res;
+        getKlayo(accessToken).then(res => {
+          this.klayoGuests = res;
         });
       },
       async getAllAttendingGuests() {
@@ -241,13 +234,13 @@
             this.reset();
             this.resetValidation();
           }
-        } else if (guestType === 'Error Guests') {
-          for (var l = 0; l < this.errorGuests.length; l++) {
+        } else if (guestType === 'Klayo') {
+          for (var l = 0; l < this.klayoGuests.length; l++) {
             packet = {
-              number: this.errorGuests[l].phone,
+              number: this.klayoGuests[l].phone,
               message: messageBody
             }
-            this.sendFullMessage(packet, this.errorGuests[l].name);
+            this.sendFullMessage(packet, this.klayoGuests[l].name);
             this.reset();
             this.resetValidation();
           }
